@@ -8,6 +8,8 @@ import (
 )
 
 func main() {
+
+	//Test Code for go-redis, useless!
 	ctx := context.Background()
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
