@@ -4,37 +4,28 @@ import (
 	"context"
 	"fmt"
 
+	rankList "github.com/Cesare4869/rankingList"
 	"github.com/redis/go-redis/v9"
 )
 
 func main() {
 
-	//Test Code for go-redis, useless!
-	ctx := context.Background()
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
+	rds := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
 	})
+	ctx := context.TODO()
+	key := "rankList:example"
+	defer rds.Del(ctx, key)
 
-	err := rdb.Set(ctx, "key", "value", 0).Err()
+	rankList, err := rankList.New(rds, key)
 	if err != nil {
 		panic(err)
 	}
 
-	val, err := rdb.Get(ctx, "key").Result()
+	score, err := rankList.Update(ctx, 1, 100)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("key", val)
-
-	val2, err := rdb.Get(ctx, "key2").Result()
-	if err == redis.Nil {
-		fmt.Println("key2 does not exist")
-	} else if err != nil {
-		panic(err)
-	} else {
-		fmt.Println("key2", val2)
-	}
+	fmt.Println(score)
 
 }
