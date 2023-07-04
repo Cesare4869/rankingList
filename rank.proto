@@ -11,7 +11,7 @@ message UpdatePlayerRankInfoReq
 
 message UpdatePlayerRankInfoRes
 {
-  int32 RetCode  = 1;
+  string message = 1;
 }
 
 //玩家信息
