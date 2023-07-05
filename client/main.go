@@ -38,5 +38,5 @@ func main() {
 
 	request := &rank.UpdatePlayerRankInfoReq{Roleid: 21, Score: 100}
 	resp := makeRequest(request)
-	fmt.Printf("Response from API is : %v\n", resp.GetMessage())
+	fmt.Printf("Return Code from API is : %v\n", resp.RetCode)
 }

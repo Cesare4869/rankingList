@@ -3,11 +3,15 @@ package rankList
 import (
 	"context"
 	"fmt"
-	_ "log"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"strconv"
 	_ "strings"
 	_ "time"
 
+	"github.com/Cesare4869/rankingList/rank"
+	proto3 "github.com/golang/protobuf/proto"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -27,6 +31,32 @@ func New(rds *redis.Client, key string) (*RankingList, error) {
 		Redis: rds,
 		Key:   key,
 	}, nil
+}
+
+func (h *RankingList) MyHanlderFunc(resp http.ResponseWriter, req *http.Request) {
+	contentLenth := req.ContentLength
+	fmt.Printf("Content Length Received : %v\n", contentLenth)
+	request := &rank.UpdatePlayerRankInfoReq{}
+	data, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		log.Fatalf("Unable to read message from request : %v", err)
+	}
+	proto3.Unmarshal(data, request)
+	roleid := request.GetRoleid()
+	score := request.GetScore()
+	fmt.Println(roleid, score)
+	ctx := context.Background()
+	err = h.Redis.Set(ctx, "score3", 300, 0).Err()
+	if err != nil {
+		fmt.Printf("set score failed, err:%v\n", err)
+		return
+	}
+	result := &rank.UpdatePlayerRankInfoRes{RetCode: 1}
+	response, err := proto3.Marshal(result)
+	if err != nil {
+		log.Fatalf("Unable to marshal response : %v", err)
+	}
+	resp.Write(response)
 }
 
 func (r *RankingList) Update(ctx context.Context, uid, val int64) (int64, error) {

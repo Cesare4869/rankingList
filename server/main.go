@@ -1,21 +1,23 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
 
-	// rankList "github.com/Cesare4869/rankingList"
+	rankList "github.com/Cesare4869/rankingList"
 	"github.com/Cesare4869/rankingList/rank"
 	proto3 "github.com/golang/protobuf/proto"
 
-	// "github.com/redis/go-redis/v9"
 	"github.com/gorilla/mux"
+	"github.com/redis/go-redis/v9"
 )
 
-func Update(resp http.ResponseWriter, req *http.Request) {
+// No Need, MyHanlderFunc is moved to rankList.go
+func (h *Handler) MyHanlderFunc(resp http.ResponseWriter, req *http.Request) {
 	contentLenth := req.ContentLength
 	fmt.Printf("Content Length Received : %v\n", contentLenth)
 	request := &rank.UpdatePlayerRankInfoReq{}
@@ -27,7 +29,13 @@ func Update(resp http.ResponseWriter, req *http.Request) {
 	roleid := request.GetRoleid()
 	score := request.GetScore()
 	fmt.Println(roleid, score)
-	result := &rank.UpdatePlayerRankInfoRes{Message: "Hello World!"}
+	ctx := context.Background()
+	err = h.RedisClient.Set(ctx, "score2", 200, 0).Err()
+	if err != nil {
+		fmt.Printf("set score failed, err:%v\n", err)
+		return
+	}
+	result := &rank.UpdatePlayerRankInfoRes{RetCode: 1}
 	response, err := proto3.Marshal(result)
 	if err != nil {
 		log.Fatalf("Unable to marshal response : %v", err)
@@ -35,41 +43,60 @@ func Update(resp http.ResponseWriter, req *http.Request) {
 	resp.Write(response)
 }
 
+// func Update(resp http.ResponseWriter, req *http.Request) {
+// 	contentLenth := req.ContentLength
+// 	fmt.Printf("Content Length Received : %v\n", contentLenth)
+// 	request := &rank.UpdatePlayerRankInfoReq{}
+// 	data, err := ioutil.ReadAll(req.Body)
+// 	if err != nil {
+// 		log.Fatalf("Unable to read message from request : %v", err)
+// 	}
+// 	proto3.Unmarshal(data, request)
+// 	roleid := request.GetRoleid()
+// 	score := request.GetScore()
+// 	fmt.Println(roleid, score)
+// 	result := &rank.UpdatePlayerRankInfoRes{RetCode: 1}
+// 	response, err := proto3.Marshal(result)
+// 	if err != nil {
+// 		log.Fatalf("Unable to marshal response : %v", err)
+// 	}
+// 	resp.Write(response)
+// }
+
+// func redisHandler(c *redis.Client, f func(c *redis.Client, resp http.ResponseWriter, req *http.Request)) http.Handler {
+// 	return http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) f(c, w, r))
+// }
+
+// func AddToHandler(c *redis.Client, resp http.ResponseWriter, req *http.Request) {
+
+// }
+
+type Handler struct {
+	RedisClient *redis.Client
+}
+
 func main() {
 
-	// rds := redis.NewClient(&redis.Options{
-	// 	Addr: "localhost:6379",
-	// })
-	// ctx := context.TODO()
-	// key := "rankList:example"
-	// defer rds.Del(ctx, key)
+	rds := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+	})
+	ctx := context.TODO()
+	key := "rankList:example"
+	defer rds.Del(ctx, key)
 
-	// rankList, err := rankList.New(rds, key)
-	// if err != nil {
-	// 	panic(err)
+	// handler := &Handler{
+	// 	RedisClient: rds,
 	// }
-	// rankList.Update(ctx, 21, 100)
 
-	// req := &rank.UpdatePlayerRankInfoReq{Roleid: 21, Score: 100}
-	// data, err := proto3.Marshal(req)
-	// if err != nil {
-	// 	log.Fatalf("Error while marshalling the object : %v", err)
-	// }
-	// fmt.Println(data)
-	// // fmt.Println(req)
-
-	// res := &rank.UpdatePlayerRankInfoReq{}
-	// err = proto3.Unmarshal(data, res)
-	// fmt.Println(res.GetScore())
-	// if err != nil {
-	// 	log.Fatalf("Error while un-marshalling the object : %v", err)
-	// }
-	// fmt.Printf("Value from un-marshalled data is %v", res.GetRoleid())
+	rankList, err := rankList.New(rds, key)
+	if err != nil {
+		panic(err)
+	}
 
 	// API Server
 	fmt.Println("Starting the API Server")
 	r := mux.NewRouter()
-	r.HandleFunc("/update", Update).Methods("POST")
+	r.HandleFunc("/update", rankList.MyHanlderFunc).Methods("POST")
 
 	server := &http.Server{
 		Handler:      r,
