@@ -33,29 +33,141 @@ func New(rds *redis.Client, key string) (*RankingList, error) {
 	}, nil
 }
 
-func (h *RankingList) MyHanlderFunc(resp http.ResponseWriter, req *http.Request) {
-	contentLenth := req.ContentLength
-	fmt.Printf("Content Length Received : %v\n", contentLenth)
+func (h *RankingList) MyHanlderFuncQueryTop5(resp http.ResponseWriter, req *http.Request) {
+	// contentLenth := req.ContentLength
+	// fmt.Printf("Content Length Received : %v\n", contentLenth)
+
+	ctx := context.TODO()
+	list, err := h.GetRankingList(ctx, 5, true)
+	if err != nil {
+		log.Fatalf("Uable to get the top 5 rank list : %v", err)
+	}
+
+	result := &rank.QueryTop5RankRes{
+		Info:    []*rank.PlayerInfo{}, // 创建空的 PlayerInfo 列表
+		RetCode: 0,
+	}
+
+	// 循环添加多个 PlayerInfo 对象到重复参数 info
+	for _, z := range list {
+		playerInfo := &rank.PlayerInfo{
+			Roleid: int64(z.UID),
+			Score:  int64(z.Val),
+			Rank:   int64(z.Rank),
+		}
+		result.Info = append(result.Info, playerInfo)
+	}
+	fmt.Printf("Querying for top5 in the ranklist, and the result is %v\n", result)
+	// final_result := &rank.QueryTop5RankRes{Info: result, RetCode: 5}
+	response, err := proto3.Marshal(result)
+	if err != nil {
+		log.Fatalf("Unable to marshal response : %v", err)
+	}
+	resp.Write(response)
+}
+
+func (h *RankingList) MyHanlderFuncQueryTotal(resp http.ResponseWriter, req *http.Request) {
+	// contentLenth := req.ContentLength
+	// fmt.Printf("Content Length Received : %v\n", contentLenth)
+
+	ctx := context.TODO()
+	total := h.GetTotalCount(ctx)
+	fmt.Printf("Querying for the total number and the total number is %v\n", total)
+	result := &rank.QueryPlayerNumberRes{Total: total}
+	response, err := proto3.Marshal(result)
+	if err != nil {
+		log.Fatalf("Unable to marshal response : %v", err)
+	}
+	resp.Write(response)
+}
+
+func (h *RankingList) MyHanlderFuncQueryScore(resp http.ResponseWriter, req *http.Request) {
+	// contentLenth := req.ContentLength
+	// fmt.Printf("Content Length Received : %v\n", contentLenth)
+	request := &rank.QueryPlayerScoreReq{}
+	data, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		log.Fatalf("Unable to read message from request : %v", err)
+	}
+	proto3.Unmarshal(data, request)
+
+	roleid := request.GetRoleid()
+	ctx := context.TODO()
+	ranking, err := h.GetUserRank(ctx, roleid, true)
+	score, err := h.GetUserVal(ctx, roleid)
+	if err != nil {
+		fmt.Printf("get user rank, err:%v\n", err)
+		return
+	}
+	player := &rank.PlayerInfo{
+		Roleid: roleid,
+		Score:  score,
+		Rank:   ranking,
+	}
+
+	fmt.Printf("Querying for the player score and the Player %v's score is %v\n", roleid, score)
+	result := &rank.QueryPlayerScoreRes{Info: player, RetCode: 2} // 这里要不要返回Player的所有信息，还是只是返回Player的ranking信息
+	response, err := proto3.Marshal(result)
+	if err != nil {
+		log.Fatalf("Unable to marshal response : %v", err)
+	}
+	resp.Write(response)
+}
+
+func (h *RankingList) MyHanlderFuncQueryRank(resp http.ResponseWriter, req *http.Request) {
+	// contentLenth := req.ContentLength
+	// fmt.Printf("Content Length Received : %v\n", contentLenth)
+	request := &rank.QueryPlayerRankReq{}
+	data, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		log.Fatalf("Unable to read message from request : %v", err)
+	}
+	proto3.Unmarshal(data, request)
+
+	roleid := request.GetRoleid()
+	ctx := context.TODO()
+	ranking, err := h.GetUserRank(ctx, roleid, true)
+	score, err := h.GetUserVal(ctx, roleid)
+	if err != nil {
+		fmt.Printf("get user rank, err:%v\n", err)
+		return
+	}
+	player := &rank.PlayerInfo{
+		Roleid: roleid,
+		Score:  score,
+		Rank:   ranking,
+	}
+
+	fmt.Printf("Querying for the player rank and the Player %v's rank is %v\n", roleid, ranking)
+	result := &rank.QueryPlayerRankRes{Info: player, RetCode: 2} // 这里要不要返回Player的所有信息，还是只是返回Player的ranking信息
+	response, err := proto3.Marshal(result)
+	if err != nil {
+		log.Fatalf("Unable to marshal response : %v", err)
+	}
+	resp.Write(response)
+}
+
+func (h *RankingList) MyHanlderFuncUpdate(resp http.ResponseWriter, req *http.Request) {
+	// contentLenth := req.ContentLength
+	// fmt.Printf("Content Length Received : %v\n", contentLenth)
 	request := &rank.UpdatePlayerRankInfoReq{}
 	data, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		log.Fatalf("Unable to read message from request : %v", err)
 	}
 	proto3.Unmarshal(data, request)
+
 	roleid := request.GetRoleid()
 	score := request.GetScore()
-	fmt.Println(roleid, score)
-	ctx := context.Background()
-	err = h.Redis.Set(ctx, "score3", 300, 0).Err()
-	if err != nil {
-		fmt.Printf("set score failed, err:%v\n", err)
-		return
-	}
+	ctx := context.TODO()
+	h.Update(ctx, roleid, score)
+
 	result := &rank.UpdatePlayerRankInfoRes{RetCode: 1}
 	response, err := proto3.Marshal(result)
 	if err != nil {
 		log.Fatalf("Unable to marshal response : %v", err)
 	}
+	fmt.Println("Update Player Info Successfully")
 	resp.Write(response)
 }
 
@@ -128,7 +240,7 @@ func (r *RankingList) GetUserVal(ctx context.Context, uid int64) (int64, error) 
 	return int64(score), nil
 }
 
-func (r *RankingList) GerUserRank(ctx context.Context, uid int64, desc bool) (int64, error) {
+func (r *RankingList) GetUserRank(ctx context.Context, uid int64, desc bool) (int64, error) {
 	zrank := r.Redis.ZRank
 	if desc {
 		zrank = r.Redis.ZRevRank

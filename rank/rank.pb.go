@@ -27,7 +27,7 @@ type UpdatePlayerRankInfoReq struct {
 	unknownFields protoimpl.UnknownFields
 
 	Roleid int64 `protobuf:"varint,1,opt,name=roleid,proto3" json:"roleid,omitempty"`
-	Score  int32 `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`
+	Score  int64 `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`
 }
 
 func (x *UpdatePlayerRankInfoReq) Reset() {
@@ -69,7 +69,7 @@ func (x *UpdatePlayerRankInfoReq) GetRoleid() int64 {
 	return 0
 }
 
-func (x *UpdatePlayerRankInfoReq) GetScore() int32 {
+func (x *UpdatePlayerRankInfoReq) GetScore() int64 {
 	if x != nil {
 		return x.Score
 	}
@@ -130,8 +130,8 @@ type PlayerInfo struct {
 	unknownFields protoimpl.UnknownFields
 
 	Roleid int64 `protobuf:"varint,1,opt,name=roleid,proto3" json:"roleid,omitempty"`
-	Score  int32 `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`
-	Rank   int32 `protobuf:"varint,3,opt,name=rank,proto3" json:"rank,omitempty"`
+	Score  int64 `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`
+	Rank   int64 `protobuf:"varint,3,opt,name=rank,proto3" json:"rank,omitempty"`
 }
 
 func (x *PlayerInfo) Reset() {
@@ -173,14 +173,14 @@ func (x *PlayerInfo) GetRoleid() int64 {
 	return 0
 }
 
-func (x *PlayerInfo) GetScore() int32 {
+func (x *PlayerInfo) GetScore() int64 {
 	if x != nil {
 		return x.Score
 	}
 	return 0
 }
 
-func (x *PlayerInfo) GetRank() int32 {
+func (x *PlayerInfo) GetRank() int64 {
 	if x != nil {
 		return x.Rank
 	}
@@ -393,6 +393,92 @@ func (x *QueryPlayerRankRes) GetRetCode() int32 {
 	return 0
 }
 
+// 查询玩家数量
+type QueryPlayerNumberReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *QueryPlayerNumberReq) Reset() {
+	*x = QueryPlayerNumberReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_rank_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryPlayerNumberReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryPlayerNumberReq) ProtoMessage() {}
+
+func (x *QueryPlayerNumberReq) ProtoReflect() protoreflect.Message {
+	mi := &file_rank_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QueryPlayerNumberReq.ProtoReflect.Descriptor instead.
+func (*QueryPlayerNumberReq) Descriptor() ([]byte, []int) {
+	return file_rank_proto_rawDescGZIP(), []int{7}
+}
+
+type QueryPlayerNumberRes struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Total int64 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+}
+
+func (x *QueryPlayerNumberRes) Reset() {
+	*x = QueryPlayerNumberRes{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_rank_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryPlayerNumberRes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryPlayerNumberRes) ProtoMessage() {}
+
+func (x *QueryPlayerNumberRes) ProtoReflect() protoreflect.Message {
+	mi := &file_rank_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QueryPlayerNumberRes.ProtoReflect.Descriptor instead.
+func (*QueryPlayerNumberRes) Descriptor() ([]byte, []int) {
+	return file_rank_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *QueryPlayerNumberRes) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 // 查询前五玩家
 type QueryTop5RankReq struct {
 	state         protoimpl.MessageState
@@ -403,7 +489,7 @@ type QueryTop5RankReq struct {
 func (x *QueryTop5RankReq) Reset() {
 	*x = QueryTop5RankReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rank_proto_msgTypes[7]
+		mi := &file_rank_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -416,7 +502,7 @@ func (x *QueryTop5RankReq) String() string {
 func (*QueryTop5RankReq) ProtoMessage() {}
 
 func (x *QueryTop5RankReq) ProtoReflect() protoreflect.Message {
-	mi := &file_rank_proto_msgTypes[7]
+	mi := &file_rank_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -429,7 +515,7 @@ func (x *QueryTop5RankReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryTop5RankReq.ProtoReflect.Descriptor instead.
 func (*QueryTop5RankReq) Descriptor() ([]byte, []int) {
-	return file_rank_proto_rawDescGZIP(), []int{7}
+	return file_rank_proto_rawDescGZIP(), []int{9}
 }
 
 type QueryTop5RankRes struct {
@@ -444,7 +530,7 @@ type QueryTop5RankRes struct {
 func (x *QueryTop5RankRes) Reset() {
 	*x = QueryTop5RankRes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rank_proto_msgTypes[8]
+		mi := &file_rank_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -457,7 +543,7 @@ func (x *QueryTop5RankRes) String() string {
 func (*QueryTop5RankRes) ProtoMessage() {}
 
 func (x *QueryTop5RankRes) ProtoReflect() protoreflect.Message {
-	mi := &file_rank_proto_msgTypes[8]
+	mi := &file_rank_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -470,7 +556,7 @@ func (x *QueryTop5RankRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryTop5RankRes.ProtoReflect.Descriptor instead.
 func (*QueryTop5RankRes) Descriptor() ([]byte, []int) {
-	return file_rank_proto_rawDescGZIP(), []int{8}
+	return file_rank_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *QueryTop5RankRes) GetInfo() []*PlayerInfo {
@@ -499,7 +585,7 @@ type DeletePlayerRankReq struct {
 func (x *DeletePlayerRankReq) Reset() {
 	*x = DeletePlayerRankReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rank_proto_msgTypes[9]
+		mi := &file_rank_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -512,7 +598,7 @@ func (x *DeletePlayerRankReq) String() string {
 func (*DeletePlayerRankReq) ProtoMessage() {}
 
 func (x *DeletePlayerRankReq) ProtoReflect() protoreflect.Message {
-	mi := &file_rank_proto_msgTypes[9]
+	mi := &file_rank_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -525,7 +611,7 @@ func (x *DeletePlayerRankReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePlayerRankReq.ProtoReflect.Descriptor instead.
 func (*DeletePlayerRankReq) Descriptor() ([]byte, []int) {
-	return file_rank_proto_rawDescGZIP(), []int{9}
+	return file_rank_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *DeletePlayerRankReq) GetRoleid() int64 {
@@ -546,7 +632,7 @@ type DeletePlayerRankRes struct {
 func (x *DeletePlayerRankRes) Reset() {
 	*x = DeletePlayerRankRes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rank_proto_msgTypes[10]
+		mi := &file_rank_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -559,7 +645,7 @@ func (x *DeletePlayerRankRes) String() string {
 func (*DeletePlayerRankRes) ProtoMessage() {}
 
 func (x *DeletePlayerRankRes) ProtoReflect() protoreflect.Message {
-	mi := &file_rank_proto_msgTypes[10]
+	mi := &file_rank_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -572,7 +658,7 @@ func (x *DeletePlayerRankRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePlayerRankRes.ProtoReflect.Descriptor instead.
 func (*DeletePlayerRankRes) Descriptor() ([]byte, []int) {
-	return file_rank_proto_rawDescGZIP(), []int{10}
+	return file_rank_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *DeletePlayerRankRes) GetRetCode() int32 {
@@ -592,7 +678,7 @@ type ClearRankInofReq struct {
 func (x *ClearRankInofReq) Reset() {
 	*x = ClearRankInofReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rank_proto_msgTypes[11]
+		mi := &file_rank_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -605,7 +691,7 @@ func (x *ClearRankInofReq) String() string {
 func (*ClearRankInofReq) ProtoMessage() {}
 
 func (x *ClearRankInofReq) ProtoReflect() protoreflect.Message {
-	mi := &file_rank_proto_msgTypes[11]
+	mi := &file_rank_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -618,7 +704,7 @@ func (x *ClearRankInofReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClearRankInofReq.ProtoReflect.Descriptor instead.
 func (*ClearRankInofReq) Descriptor() ([]byte, []int) {
-	return file_rank_proto_rawDescGZIP(), []int{11}
+	return file_rank_proto_rawDescGZIP(), []int{13}
 }
 
 type ClearRankInofRes struct {
@@ -632,7 +718,7 @@ type ClearRankInofRes struct {
 func (x *ClearRankInofRes) Reset() {
 	*x = ClearRankInofRes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rank_proto_msgTypes[12]
+		mi := &file_rank_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -645,7 +731,7 @@ func (x *ClearRankInofRes) String() string {
 func (*ClearRankInofRes) ProtoMessage() {}
 
 func (x *ClearRankInofRes) ProtoReflect() protoreflect.Message {
-	mi := &file_rank_proto_msgTypes[12]
+	mi := &file_rank_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -658,7 +744,7 @@ func (x *ClearRankInofRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClearRankInofRes.ProtoReflect.Descriptor instead.
 func (*ClearRankInofRes) Descriptor() ([]byte, []int) {
-	return file_rank_proto_rawDescGZIP(), []int{12}
+	return file_rank_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ClearRankInofRes) GetRetCode() int32 {
@@ -676,15 +762,15 @@ var file_rank_proto_rawDesc = []byte{
 	0x65, 0x72, 0x52, 0x61, 0x6e, 0x6b, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x12, 0x16, 0x0a,
 	0x06, 0x72, 0x6f, 0x6c, 0x65, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x72,
 	0x6f, 0x6c, 0x65, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x22, 0x33, 0x0a, 0x17, 0x55,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x22, 0x33, 0x0a, 0x17, 0x55,
 	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x61, 0x6e, 0x6b, 0x49,
 	0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64,
 	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65,
 	0x22, 0x4e, 0x0a, 0x0a, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x16,
 	0x0a, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06,
 	0x72, 0x6f, 0x6c, 0x65, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x12, 0x12, 0x0a, 0x04,
-	0x72, 0x61, 0x6e, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x72, 0x61, 0x6e, 0x6b,
+	0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x12, 0x12, 0x0a, 0x04,
+	0x72, 0x61, 0x6e, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x72, 0x61, 0x6e, 0x6b,
 	0x22, 0x2d, 0x0a, 0x13, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x53,
 	0x63, 0x6f, 0x72, 0x65, 0x52, 0x65, 0x71, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x69, 0x64, 0x22,
@@ -701,25 +787,29 @@ var file_rank_proto_rawDesc = []byte{
 	0x66, 0x6f, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x72, 0x61, 0x6e, 0x6b, 0x2e,
 	0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x04, 0x69, 0x6e, 0x66, 0x6f,
 	0x12, 0x18, 0x0a, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x05, 0x52, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x22, 0x12, 0x0a, 0x10, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x54, 0x6f, 0x70, 0x35, 0x52, 0x61, 0x6e, 0x6b, 0x52, 0x65, 0x71, 0x22, 0x52,
-	0x0a, 0x10, 0x51, 0x75, 0x65, 0x72, 0x79, 0x54, 0x6f, 0x70, 0x35, 0x52, 0x61, 0x6e, 0x6b, 0x52,
-	0x65, 0x73, 0x12, 0x24, 0x0a, 0x04, 0x69, 0x6e, 0x66, 0x6f, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
-	0x32, 0x10, 0x2e, 0x72, 0x61, 0x6e, 0x6b, 0x2e, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x49, 0x6e,
-	0x66, 0x6f, 0x52, 0x04, 0x69, 0x6e, 0x66, 0x6f, 0x12, 0x18, 0x0a, 0x07, 0x52, 0x65, 0x74, 0x43,
-	0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f,
-	0x64, 0x65, 0x22, 0x2d, 0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x6c, 0x61, 0x79,
-	0x65, 0x72, 0x52, 0x61, 0x6e, 0x6b, 0x52, 0x65, 0x71, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x6f, 0x6c,
-	0x65, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x69,
-	0x64, 0x22, 0x2f, 0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65,
-	0x72, 0x52, 0x61, 0x6e, 0x6b, 0x52, 0x65, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x52, 0x65, 0x74, 0x43,
-	0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f,
-	0x64, 0x65, 0x22, 0x12, 0x0a, 0x10, 0x43, 0x6c, 0x65, 0x61, 0x72, 0x52, 0x61, 0x6e, 0x6b, 0x49,
-	0x6e, 0x6f, 0x66, 0x52, 0x65, 0x71, 0x22, 0x2c, 0x0a, 0x10, 0x43, 0x6c, 0x65, 0x61, 0x72, 0x52,
-	0x61, 0x6e, 0x6b, 0x49, 0x6e, 0x6f, 0x66, 0x52, 0x65, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x52, 0x65,
-	0x74, 0x43, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x07, 0x52, 0x65, 0x74,
-	0x43, 0x6f, 0x64, 0x65, 0x42, 0x07, 0x5a, 0x05, 0x2f, 0x72, 0x61, 0x6e, 0x6b, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x05, 0x52, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x22, 0x16, 0x0a, 0x14, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x52,
+	0x65, 0x71, 0x22, 0x2c, 0x0a, 0x14, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6c, 0x61, 0x79, 0x65,
+	0x72, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x52, 0x65, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f,
+	0x74, 0x61, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c,
+	0x22, 0x12, 0x0a, 0x10, 0x51, 0x75, 0x65, 0x72, 0x79, 0x54, 0x6f, 0x70, 0x35, 0x52, 0x61, 0x6e,
+	0x6b, 0x52, 0x65, 0x71, 0x22, 0x52, 0x0a, 0x10, 0x51, 0x75, 0x65, 0x72, 0x79, 0x54, 0x6f, 0x70,
+	0x35, 0x52, 0x61, 0x6e, 0x6b, 0x52, 0x65, 0x73, 0x12, 0x24, 0x0a, 0x04, 0x69, 0x6e, 0x66, 0x6f,
+	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x72, 0x61, 0x6e, 0x6b, 0x2e, 0x50, 0x6c,
+	0x61, 0x79, 0x65, 0x72, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x04, 0x69, 0x6e, 0x66, 0x6f, 0x12, 0x18,
+	0x0a, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x22, 0x2d, 0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65,
+	0x74, 0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x61, 0x6e, 0x6b, 0x52, 0x65, 0x71, 0x12,
+	0x16, 0x0a, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x06, 0x72, 0x6f, 0x6c, 0x65, 0x69, 0x64, 0x22, 0x2f, 0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65, 0x74,
+	0x65, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x61, 0x6e, 0x6b, 0x52, 0x65, 0x73, 0x12, 0x18,
+	0x0a, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x22, 0x12, 0x0a, 0x10, 0x43, 0x6c, 0x65, 0x61,
+	0x72, 0x52, 0x61, 0x6e, 0x6b, 0x49, 0x6e, 0x6f, 0x66, 0x52, 0x65, 0x71, 0x22, 0x2c, 0x0a, 0x10,
+	0x43, 0x6c, 0x65, 0x61, 0x72, 0x52, 0x61, 0x6e, 0x6b, 0x49, 0x6e, 0x6f, 0x66, 0x52, 0x65, 0x73,
+	0x12, 0x18, 0x0a, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x05, 0x52, 0x07, 0x52, 0x65, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x42, 0x07, 0x5a, 0x05, 0x2f, 0x72,
+	0x61, 0x6e, 0x6b, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -734,7 +824,7 @@ func file_rank_proto_rawDescGZIP() []byte {
 	return file_rank_proto_rawDescData
 }
 
-var file_rank_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_rank_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_rank_proto_goTypes = []interface{}{
 	(*UpdatePlayerRankInfoReq)(nil), // 0: rank.UpdatePlayerRankInfoReq
 	(*UpdatePlayerRankInfoRes)(nil), // 1: rank.UpdatePlayerRankInfoRes
@@ -743,12 +833,14 @@ var file_rank_proto_goTypes = []interface{}{
 	(*QueryPlayerScoreRes)(nil),     // 4: rank.QueryPlayerScoreRes
 	(*QueryPlayerRankReq)(nil),      // 5: rank.QueryPlayerRankReq
 	(*QueryPlayerRankRes)(nil),      // 6: rank.QueryPlayerRankRes
-	(*QueryTop5RankReq)(nil),        // 7: rank.QueryTop5RankReq
-	(*QueryTop5RankRes)(nil),        // 8: rank.QueryTop5RankRes
-	(*DeletePlayerRankReq)(nil),     // 9: rank.DeletePlayerRankReq
-	(*DeletePlayerRankRes)(nil),     // 10: rank.DeletePlayerRankRes
-	(*ClearRankInofReq)(nil),        // 11: rank.ClearRankInofReq
-	(*ClearRankInofRes)(nil),        // 12: rank.ClearRankInofRes
+	(*QueryPlayerNumberReq)(nil),    // 7: rank.QueryPlayerNumberReq
+	(*QueryPlayerNumberRes)(nil),    // 8: rank.QueryPlayerNumberRes
+	(*QueryTop5RankReq)(nil),        // 9: rank.QueryTop5RankReq
+	(*QueryTop5RankRes)(nil),        // 10: rank.QueryTop5RankRes
+	(*DeletePlayerRankReq)(nil),     // 11: rank.DeletePlayerRankReq
+	(*DeletePlayerRankRes)(nil),     // 12: rank.DeletePlayerRankRes
+	(*ClearRankInofReq)(nil),        // 13: rank.ClearRankInofReq
+	(*ClearRankInofRes)(nil),        // 14: rank.ClearRankInofRes
 }
 var file_rank_proto_depIdxs = []int32{
 	2, // 0: rank.QueryPlayerScoreRes.info:type_name -> rank.PlayerInfo
@@ -852,7 +944,7 @@ func file_rank_proto_init() {
 			}
 		}
 		file_rank_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryTop5RankReq); i {
+			switch v := v.(*QueryPlayerNumberReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -864,7 +956,7 @@ func file_rank_proto_init() {
 			}
 		}
 		file_rank_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryTop5RankRes); i {
+			switch v := v.(*QueryPlayerNumberRes); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -876,7 +968,7 @@ func file_rank_proto_init() {
 			}
 		}
 		file_rank_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeletePlayerRankReq); i {
+			switch v := v.(*QueryTop5RankReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -888,7 +980,7 @@ func file_rank_proto_init() {
 			}
 		}
 		file_rank_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeletePlayerRankRes); i {
+			switch v := v.(*QueryTop5RankRes); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -900,7 +992,7 @@ func file_rank_proto_init() {
 			}
 		}
 		file_rank_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ClearRankInofReq); i {
+			switch v := v.(*DeletePlayerRankReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -912,6 +1004,30 @@ func file_rank_proto_init() {
 			}
 		}
 		file_rank_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeletePlayerRankRes); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_rank_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ClearRankInofReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_rank_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ClearRankInofRes); i {
 			case 0:
 				return &v.state
@@ -930,7 +1046,7 @@ func file_rank_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_rank_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

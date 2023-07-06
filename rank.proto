@@ -6,7 +6,7 @@ option go_package = "/rank";
 message UpdatePlayerRankInfoReq
 {
   int64 roleid = 1;
-  int32 score  = 2;
+  int64 score  = 2;
 }
 
 message UpdatePlayerRankInfoRes
@@ -18,8 +18,8 @@ message UpdatePlayerRankInfoRes
 message PlayerInfo
 {
 	int64 roleid   = 1;
-  	int32 score    = 2;
-  	int32 rank     = 3;
+  int64 score    = 2;
+  int64 rank     = 3;
 }
 
 
@@ -43,6 +43,14 @@ message QueryPlayerRankRes
 {
   PlayerInfo info   = 1;
   int32 RetCode  	= 2;
+}
+
+// 查询玩家数量
+message QueryPlayerNumberReq
+{}
+message QueryPlayerNumberRes
+{
+  int64 total = 1;
 }
 
 // 查询前五玩家

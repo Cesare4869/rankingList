@@ -43,37 +43,9 @@ func (h *Handler) MyHanlderFunc(resp http.ResponseWriter, req *http.Request) {
 	resp.Write(response)
 }
 
-// func Update(resp http.ResponseWriter, req *http.Request) {
-// 	contentLenth := req.ContentLength
-// 	fmt.Printf("Content Length Received : %v\n", contentLenth)
-// 	request := &rank.UpdatePlayerRankInfoReq{}
-// 	data, err := ioutil.ReadAll(req.Body)
-// 	if err != nil {
-// 		log.Fatalf("Unable to read message from request : %v", err)
-// 	}
-// 	proto3.Unmarshal(data, request)
-// 	roleid := request.GetRoleid()
-// 	score := request.GetScore()
-// 	fmt.Println(roleid, score)
-// 	result := &rank.UpdatePlayerRankInfoRes{RetCode: 1}
-// 	response, err := proto3.Marshal(result)
-// 	if err != nil {
-// 		log.Fatalf("Unable to marshal response : %v", err)
-// 	}
-// 	resp.Write(response)
-// }
-
-// func redisHandler(c *redis.Client, f func(c *redis.Client, resp http.ResponseWriter, req *http.Request)) http.Handler {
-// 	return http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) f(c, w, r))
-// }
-
-// func AddToHandler(c *redis.Client, resp http.ResponseWriter, req *http.Request) {
-
-// }
-
 type Handler struct {
 	RedisClient *redis.Client
-}
+} //暂时不需要，使用rankList定义type
 
 func main() {
 
@@ -96,7 +68,11 @@ func main() {
 	// API Server
 	fmt.Println("Starting the API Server")
 	r := mux.NewRouter()
-	r.HandleFunc("/update", rankList.MyHanlderFunc).Methods("POST")
+	r.HandleFunc("/update", rankList.MyHanlderFuncUpdate).Methods("POST")
+	r.HandleFunc("/query/rank", rankList.MyHanlderFuncQueryRank).Methods("POST")
+	r.HandleFunc("/query/score", rankList.MyHanlderFuncQueryScore).Methods("POST")
+	r.HandleFunc("/query/total", rankList.MyHanlderFuncQueryTotal).Methods("GET")
+	r.HandleFunc("/query/top5", rankList.MyHanlderFuncQueryTop5).Methods("GET")
 
 	server := &http.Server{
 		Handler:      r,
