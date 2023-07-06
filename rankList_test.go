@@ -76,4 +76,14 @@ func TestRankList(t *testing.T) {
 	require.Nil(t, err)
 	require.Equal(t, int64(200), uv)
 
+	err = rankList.RemoveMemberFromRankingList(ctx, uid)
+	require.Nil(t, err)
+	total = rankList.GetTotalCount(ctx)
+	require.Equal(t, int64(2), total)
+
+	err = rankList.ClearRankingList(ctx)
+	require.Nil(t, err)
+	total = rankList.GetTotalCount(ctx)
+	require.Equal(t, int64(0), total)
+
 }

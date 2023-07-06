@@ -50,7 +50,7 @@ type Handler struct {
 func main() {
 
 	rds := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: "localhost:6379", //localhost:6379 for local, redis-container:6379 for docker
 	})
 	ctx := context.TODO()
 	key := "rankList:example"
@@ -73,6 +73,8 @@ func main() {
 	r.HandleFunc("/query/score", rankList.MyHanlderFuncQueryScore).Methods("POST")
 	r.HandleFunc("/query/total", rankList.MyHanlderFuncQueryTotal).Methods("GET")
 	r.HandleFunc("/query/top5", rankList.MyHanlderFuncQueryTop5).Methods("GET")
+	r.HandleFunc("/delete", rankList.MyhandlerFuncDelete).Methods("POST")
+	r.HandleFunc("/clear", rankList.MyhandleFuncClear).Methods("GET")
 
 	server := &http.Server{
 		Handler:      r,

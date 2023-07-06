@@ -33,6 +33,46 @@ func New(rds *redis.Client, key string) (*RankingList, error) {
 	}, nil
 }
 
+func (h *RankingList) MyhandleFuncClear(resp http.ResponseWriter, req *http.Request) {
+	// contentLenth := req.ContentLength
+	// fmt.Printf("Content Length Received : %v\n", contentLenth)
+
+	ctx := context.TODO()
+	err := h.ClearRankingList(ctx)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Clear the ranking List successfully!")
+	result := &rank.ClearRankInofRes{RetCode: 0}
+	response, err := proto3.Marshal(result)
+	if err != nil {
+		log.Fatalf("Unable to marshal response : %v", err)
+	}
+	resp.Write(response)
+}
+
+func (h *RankingList) MyhandlerFuncDelete(resp http.ResponseWriter, req *http.Request) {
+	// contentLenth := req.ContentLength
+	// fmt.Printf("Content Length Received : %v\n", contentLenth)
+	request := &rank.DeletePlayerRankReq{}
+	data, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		log.Fatalf("Unable to read message from request : %v", err)
+	}
+	proto3.Unmarshal(data, request)
+
+	roleid := request.GetRoleid()
+	ctx := context.TODO()
+	h.RemoveMemberFromRankingList(ctx, roleid)
+	result := &rank.DeletePlayerRankRes{RetCode: 0}
+	response, err := proto3.Marshal(result)
+	if err != nil {
+		log.Fatalf("Unable to marshal response : %v", err)
+	}
+	fmt.Println("Delete Player Rank Info Successfully!")
+	resp.Write(response)
+}
+
 func (h *RankingList) MyHanlderFuncQueryTop5(resp http.ResponseWriter, req *http.Request) {
 	// contentLenth := req.ContentLength
 	// fmt.Printf("Content Length Received : %v\n", contentLenth)
@@ -58,7 +98,6 @@ func (h *RankingList) MyHanlderFuncQueryTop5(resp http.ResponseWriter, req *http
 		result.Info = append(result.Info, playerInfo)
 	}
 	fmt.Printf("Querying for top5 in the ranklist, and the result is %v\n", result)
-	// final_result := &rank.QueryTop5RankRes{Info: result, RetCode: 5}
 	response, err := proto3.Marshal(result)
 	if err != nil {
 		log.Fatalf("Unable to marshal response : %v", err)
@@ -106,7 +145,7 @@ func (h *RankingList) MyHanlderFuncQueryScore(resp http.ResponseWriter, req *htt
 	}
 
 	fmt.Printf("Querying for the player score and the Player %v's score is %v\n", roleid, score)
-	result := &rank.QueryPlayerScoreRes{Info: player, RetCode: 2} // 这里要不要返回Player的所有信息，还是只是返回Player的ranking信息
+	result := &rank.QueryPlayerScoreRes{Info: player, RetCode: 0} // 这里要不要返回Player的所有信息，还是只是返回Player的ranking信息
 	response, err := proto3.Marshal(result)
 	if err != nil {
 		log.Fatalf("Unable to marshal response : %v", err)
@@ -139,7 +178,7 @@ func (h *RankingList) MyHanlderFuncQueryRank(resp http.ResponseWriter, req *http
 	}
 
 	fmt.Printf("Querying for the player rank and the Player %v's rank is %v\n", roleid, ranking)
-	result := &rank.QueryPlayerRankRes{Info: player, RetCode: 2} // 这里要不要返回Player的所有信息，还是只是返回Player的ranking信息
+	result := &rank.QueryPlayerRankRes{Info: player, RetCode: 0} // 这里要不要返回Player的所有信息，还是只是返回Player的ranking信息
 	response, err := proto3.Marshal(result)
 	if err != nil {
 		log.Fatalf("Unable to marshal response : %v", err)
@@ -162,12 +201,12 @@ func (h *RankingList) MyHanlderFuncUpdate(resp http.ResponseWriter, req *http.Re
 	ctx := context.TODO()
 	h.Update(ctx, roleid, score)
 
-	result := &rank.UpdatePlayerRankInfoRes{RetCode: 1}
+	result := &rank.UpdatePlayerRankInfoRes{RetCode: 0}
 	response, err := proto3.Marshal(result)
 	if err != nil {
 		log.Fatalf("Unable to marshal response : %v", err)
 	}
-	fmt.Println("Update Player Info Successfully")
+	fmt.Println("Update Player Info Successfully!")
 	resp.Write(response)
 }
 
@@ -251,6 +290,22 @@ func (r *RankingList) GetUserRank(ctx context.Context, uid int64, desc bool) (in
 	}
 	rank := idx + 1
 	return rank, err
+}
+
+func (r *RankingList) RemoveMemberFromRankingList(ctx context.Context, roleID int64) error {
+	_, err := r.Redis.ZRem(ctx, r.Key, roleID).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *RankingList) ClearRankingList(ctx context.Context) error {
+	_, err := r.Redis.Del(ctx, r.Key).Result()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *RankingList) GetTotalCount(ctx context.Context) int64 {

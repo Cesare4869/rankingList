@@ -121,6 +121,44 @@ func makeRequestQueryTop5Rank(request *rank.QueryTop5RankReq) *rank.QueryTop5Ran
 	return respObj
 }
 
+func makeRequestDelete(request *rank.DeletePlayerRankReq) *rank.DeletePlayerRankRes {
+	req, err := proto.Marshal(request)
+	if err != nil {
+		log.Fatalf("Unable to marshal request : %v", err)
+	}
+
+	resp, err := http.Post("http://0.0.0.0:8080/delete", "application/x-binary", bytes.NewReader(req))
+	if err != nil {
+		log.Fatalf("Unable to read from the server : %v", err)
+	}
+	respBytes, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Fatalf("Unable to read bytes from request : %v", err)
+	}
+
+	respObj := &rank.DeletePlayerRankRes{}
+	proto.Unmarshal(respBytes, respObj)
+	return respObj
+}
+
+func makeRequestClear(request *rank.ClearRankInofReq) *rank.ClearRankInofRes {
+	resp, err := http.Get("http://0.0.0.0:8080/clear")
+
+	if err != nil {
+		log.Fatalf("Unable to read from the server : %v", err)
+	}
+	respBytes, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Fatalf("Unable to read bytes from request : %v", err)
+	}
+
+	respObj := &rank.ClearRankInofRes{}
+	proto.Unmarshal(respBytes, respObj)
+	return respObj
+}
+
 func main() {
 
 	request := &rank.UpdatePlayerRankInfoReq{Roleid: 21, Score: 100}
@@ -172,4 +210,24 @@ func main() {
 	request12 := &rank.QueryTop5RankReq{}
 	resp12 := makeRequestQueryTop5Rank(request12)
 	fmt.Printf("The top 5 of this rank list is %vand the return code is %v\n", resp12.Info, resp12.RetCode)
+
+	//delete member 26
+	request13 := &rank.DeletePlayerRankReq{Roleid: 26}
+	resp13 := makeRequestDelete(request13)
+	fmt.Printf("This member has been removed from the rank list successfully and the return code is : %v\n", resp13.RetCode)
+
+	//request for top5
+	request14 := &rank.QueryTop5RankReq{}
+	resp14 := makeRequestQueryTop5Rank(request14)
+	fmt.Printf("The top 5 of this rank list is %vand the return code is %v\n", resp14.Info, resp14.RetCode)
+
+	//request for clear the rank list
+	request15 := &rank.ClearRankInofReq{}
+	resp15 := makeRequestClear(request15)
+	fmt.Printf("Already clear the rank list and the return code is %v\n", resp15.RetCode)
+
+	//request for top5
+	request16 := &rank.QueryTop5RankReq{}
+	resp16 := makeRequestQueryTop5Rank(request16)
+	fmt.Printf("The top 5 of this rank list is %vand the return code is %v\n", resp16.Info, resp16.RetCode)
 }
