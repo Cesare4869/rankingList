@@ -160,7 +160,7 @@ func makeRequestClear(request *rank.ClearRankInofReq) *rank.ClearRankInofRes {
 }
 
 func main() {
-
+	//add two players
 	request := &rank.UpdatePlayerRankInfoReq{Roleid: 21, Score: 100}
 	resp := makeRequestUpdate(request)
 	fmt.Printf("Update Player sucessfully and the Return Code from API is : %v\n", resp.RetCode)
@@ -169,22 +169,27 @@ func main() {
 	resp2 := makeRequestUpdate(request2)
 	fmt.Printf("Update Player sucessfully and the Return Code from API is : %v\n", resp2.RetCode)
 
+	//query for player1 ranking info
 	request3 := &rank.QueryPlayerRankReq{Roleid: 21}
 	resp3 := makeRequestQueryRank(request3)
 	fmt.Printf("Query Rank for this player is : %v\n", resp3.Info.Rank)
 
+	//query for player1 score info
 	request5 := &rank.QueryPlayerScoreReq{Roleid: 21}
 	resp5 := makeRequestQueryScore(request5)
 	fmt.Printf("Query Score for this player is : %v\n", resp5.Info.Rank)
 
+	//query for player2 rank info
 	request4 := &rank.QueryPlayerRankReq{Roleid: 22}
 	resp4 := makeRequestQueryRank(request4)
 	fmt.Printf("Query Rank for this player is : %v\n", resp4.Info.Rank)
 
+	//query for player2 score info
 	request6 := &rank.QueryPlayerScoreReq{Roleid: 22}
 	resp6 := makeRequestQueryScore(request6)
 	fmt.Printf("Query Score for this player is : %v\n", resp6.Info.Rank)
 
+	//query for rankList total number
 	request7 := &rank.QueryPlayerNumberReq{}
 	resp7 := makeRequestQueryTotal(request7)
 	fmt.Printf("The total number of this rank list is : %v\n", resp7.Total)
